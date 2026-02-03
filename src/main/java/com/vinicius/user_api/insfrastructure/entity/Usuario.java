@@ -11,10 +11,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "tb_usuario")
-@AllArgsConstructor // construtor com todos os argumentos
-@NoArgsConstructor // Construor com nenhum argumentos
-@Getter// Gera Getters
-@Setter // gera Setters
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Usuario implements UserDetails {
 
     @Id
