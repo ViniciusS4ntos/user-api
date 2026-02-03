@@ -5,9 +5,9 @@ import com.vinicius.user_api.business.converter.UsuarioConverter;
 import com.vinicius.user_api.business.dto.UsuarioDTO;
 import com.vinicius.user_api.insfrastructure.entity.Usuario;
 import com.vinicius.user_api.insfrastructure.exception.ConflictException;
+import com.vinicius.user_api.insfrastructure.exception.ResourceNotFoundException;
 import com.vinicius.user_api.insfrastructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +39,15 @@ public class UsuarioService {
 
     public boolean verificarEmailExistente(String email){
         return usuarioRepository.existsByEmail(email);
+    }
+
+    public Usuario buscarUsuarioPorEmail(String email){
+        return usuarioRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("Email nao encontrado! " + email));
+    }
+
+    public void deletarUsuarioPorEmail(String email){
+        usuarioRepository.deleteByEmail(email);
     }
 
 }
