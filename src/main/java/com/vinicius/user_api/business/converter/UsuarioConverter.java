@@ -100,11 +100,4 @@ public class UsuarioConverter {
                 .build();
     }
 
-
-
-
-
-
-
-
 }
