@@ -7,6 +7,7 @@ import com.vinicius.user_api.insfrastructure.entity.Usuario;
 import com.vinicius.user_api.insfrastructure.exception.ConflictException;
 import com.vinicius.user_api.insfrastructure.exception.ResourceNotFoundException;
 import com.vinicius.user_api.insfrastructure.repository.UsuarioRepository;
+import com.vinicius.user_api.insfrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioConverter usuarioConverter;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public UsuarioDTO salvaUsuario(UsuarioDTO usuarioDTO){
         emailExiste(usuarioDTO.getEmail());
@@ -48,6 +50,16 @@ public class UsuarioService {
 
     public void deletarUsuarioPorEmail(String email){
         usuarioRepository.deleteByEmail(email);
+    }
+
+    public UsuarioDTO atualizarDadosUsuario(String token, UsuarioDTO dto){
+        String email = jwtUtil.extractUsername(token.substring(7));
+        dto.setSenha(dto.getSenha() != null ? passwordEncoder.encode(dto.getSenha()) : null);
+        Usuario usuarioEntity =  usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email nao encontrado! : " +  email));
+        Usuario usuario = usuarioConverter.updateUsuario(dto,usuarioEntity);
+
+        return usuarioConverter.paraDTO(usuarioRepository.saveAndFlush(usuario));
+
     }
 
 }
