@@ -1,6 +1,8 @@
 package com.vinicius.user_api.controller;
 
 import com.vinicius.user_api.business.UsuarioService;
+import com.vinicius.user_api.business.dto.EnderecoDTO;
+import com.vinicius.user_api.business.dto.TelefoneDTO;
 import com.vinicius.user_api.business.dto.UsuarioDTO;
 
 import com.vinicius.user_api.insfrastructure.entity.Usuario;
@@ -39,7 +41,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Usuario> buscarUsuarioPorEmail(@RequestParam("email") String email){
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorEmail(@RequestParam("email") String email){
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
     }
 
@@ -47,6 +49,24 @@ public class UsuarioController {
     public ResponseEntity<Void> deletarPorEmail(@PathVariable String email){
         usuarioService.deletarUsuarioPorEmail(email);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<UsuarioDTO> atualizaDadosUsuario(@RequestBody UsuarioDTO dto,
+                                                           @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(usuarioService.atualizarDadosUsuario(token,dto));
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDTO> atualizarEndereco(@RequestBody EnderecoDTO dto,
+                                                         @RequestParam("id") Long id){
+        return ResponseEntity.ok(usuarioService.atualizarEndereco(id,dto));
+    }
+
+    @PutMapping("/telefone")
+    public ResponseEntity<TelefoneDTO> atualizarTeleffone(@RequestBody TelefoneDTO dto,
+                                                          @RequestParam("id") Long id){
+        return ResponseEntity.ok(usuarioService.atualizarTelefone(id,dto));
     }
 
 
