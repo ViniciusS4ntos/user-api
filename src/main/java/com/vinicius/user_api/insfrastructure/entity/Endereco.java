@@ -2,6 +2,7 @@ package com.vinicius.user_api.insfrastructure.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.bind.annotation.CookieValue;
 
 @Entity
 @Table(name = "tb_endereco")
@@ -33,5 +34,8 @@ public class Endereco {
 
     @Column(name = "cep", length = 9)
     private String cep;
+
+    @Column(name = "usuario_id")
+    private Long usuario_id;
 
 }
